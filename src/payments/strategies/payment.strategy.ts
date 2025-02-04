@@ -3,6 +3,7 @@ export interface IPaymentStrategy {
 }
 
 export interface IPaymentStrategies {
+  [key: string]: IPaymentStrategy;
   ['paypal']: IPaymentStrategy;
   ['credit-card']: IPaymentStrategy;
   ['bank-transfer']: IPaymentStrategy;
