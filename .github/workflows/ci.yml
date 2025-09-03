@@ -14,37 +14,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22' # set Node version here
-          cache: 'pnpm' # cache pnpm store automatically
+          node-version: '20'
+          cache: 'pnpm'
 
-      # 3. Install pnpm globally (optional, latest version)
       - name: Install pnpm
         run: npm install -g pnpm@latest
 
-      # 4. Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # 5. Build the project
       - name: Build
         run: pnpm run build
 
-      # 6. Run tests
       - name: Run tests
         run: pnpm test
 
-      # 7. Upload coverage (optional)
       - name: Upload coverage report
         if: success() && always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage
