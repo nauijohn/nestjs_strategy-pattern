@@ -77,4 +77,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: anthonynaui/nestjs_strategy-pattern:latest
+          tags: anthonynaui/nestjs-strategy-pattern:latest
