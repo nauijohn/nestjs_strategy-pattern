@@ -22,22 +22,26 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # or your preferred version
-          cache: 'npm'
+          node-version: '22' # set Node version here
+          cache: 'pnpm' # cache pnpm store automatically
 
-      # 3. Install dependencies
+      # 3. Install pnpm globally (optional, latest version)
+      - name: Install pnpm
+        run: npm install -g pnpm@latest
+
+      # 4. Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
-      # 4. Build the project (if you have a build step)
+      # 5. Build the project
       - name: Build
-        run: npm run build
+        run: pnpm run build
 
-      # 5. Run tests
+      # 6. Run tests
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
-      # 6. Upload coverage (optional)
+      # 7. Upload coverage (optional)
       - name: Upload coverage report
         if: success() && always()
         uses: actions/upload-artifact@v3
