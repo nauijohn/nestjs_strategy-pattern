@@ -14,7 +14,7 @@ import {
 } from '../src/payments';
 
 describe('Payments(e2e)', () => {
-  let app: INestApplication;
+  let app: INestApplication<Server>;
   let server: Server;
 
   beforeAll(async () => {
@@ -31,7 +31,7 @@ describe('Payments(e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-    server = app.getHttpServer() as Server;
+    server = app.getHttpServer();
   });
 
   afterAll(async () => {
