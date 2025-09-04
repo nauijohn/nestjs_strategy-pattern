@@ -3,4 +3,7 @@
 # prettier $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
 # git update-index --again
 # pnpm exec lint-staged
-echo \"[Husky] pre-commit\"
+echo \"[Husky][PRE-COMMIT] Start ...\"
+echo \"[Husky][PRE-COMMIT] Building project ...\"
+pnpm build
+echo \"[Husky][PRE-COMMIT] Testing project ...\"
