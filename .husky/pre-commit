@@ -13,9 +13,11 @@ MSG="[HUSKY][PRE-COMMIT]"
 STAGES=(
   "Start"
   "Formatting with Prettier"
+  "Linting project"
   "Building project"
   "Testing project"
   "Formatting failed ❌"
+  "Lint failed ❌"
   "Build failed ❌"
   "Tests failed ❌"
   "All checks passed ✅"
@@ -51,6 +53,13 @@ print_boundary "$CYAN" "Start"
 print_boundary "$YELLOW" "Formatting with Prettier"
 if ! pnpm lint-staged; then
   print_boundary "$RED" "Formatting failed ❌"
+  exit 1
+fi
+
+# Lint
+print_boundary "$YELLOW" "Linting project"
+if ! pnpm lint; then
+  print_boundary "$RED" "Lint failed ❌"
   exit 1
 fi
 
