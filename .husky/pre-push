@@ -13,11 +13,12 @@ print_boundary() {
   COLOR=$1
   TEXT=$2
   local CONTENT="${MSG} ${TEXT}"
+  local LEN=${#CONTENT}
   local BORDER
-  BORDER=$(printf '%*s' 100 '' | tr ' ' '=')
+  BORDER=$(printf '%*s' "$LEN" '' | tr ' ' '=')
   echo ""
   echo "${COLOR}${BORDER}${NC}"
-  printf "${COLOR}%-*s${NC}\n" 100 "$CONTENT"
+  printf "${COLOR}%-*s${NC}\n" "$LEN" "$CONTENT"
   echo "${COLOR}${BORDER}${NC}"
 }
 
