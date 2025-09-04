@@ -1,9 +1,72 @@
-# pnpm build
-# pnpm test
-# prettier $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
-# git update-index --again
-# pnpm exec lint-staged
-echo \"[Husky][PRE-COMMIT] Start ...\"
-echo \"[Husky][PRE-COMMIT] Building project ...\"
-pnpm build
-echo \"[Husky][PRE-COMMIT] Testing project ...\"
+#!/bin/sh
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+MSG="[HUSKY][PRE-COMMIT]"
+
+# Define all stage messages
+STAGES=(
+  "Start"
+  "Formatting with Prettier"
+  "Building project"
+  "Testing project"
+  "Formatting failed ❌"
+  "Build failed ❌"
+  "Tests failed ❌"
+  "All checks passed ✅"
+)
+
+# Find the maximum length
+MAX_LEN=100
+for stage in "${STAGES[@]}"; do
+  LEN=$(( ${#MSG} + 1 + ${#stage} ))
+  if [ $LEN -gt $MAX_LEN ]; then
+    MAX_LEN=$LEN
+  fi
+done
+
+print_boundary() {
+  COLOR=$1
+  TEXT=$2
+  local CONTENT="${MSG} ${TEXT}"
+
+  local BORDER
+  BORDER=$(printf '%*s' "$MAX_LEN" '' | tr ' ' '=')
+
+  echo ""
+  echo "${COLOR}${BORDER}${NC}"
+  printf "${COLOR}%-*s${NC}\n" "$MAX_LEN" "$CONTENT"
+  echo "${COLOR}${BORDER}${NC}"
+}
+
+# Start
+print_boundary "$CYAN" "Start"
+
+# Prettier
+print_boundary "$YELLOW" "Formatting with Prettier"
+if ! pnpm lint-staged; then
+  print_boundary "$RED" "Formatting failed ❌"
+  exit 1
+fi
+
+# Build
+print_boundary "$YELLOW" "Building project"
+if ! pnpm build; then
+  print_boundary "$RED" "Build failed ❌"
+  exit 1
+fi
+
+# Test
+print_boundary "$YELLOW" "Testing project"
+if ! pnpm test; then
+  print_boundary "$RED" "Tests failed ❌"
+  exit 1
+fi
+
+# Done
+print_boundary "$GREEN" "All checks passed ✅"
