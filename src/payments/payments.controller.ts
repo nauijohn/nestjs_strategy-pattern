@@ -1,4 +1,11 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 
 import { PaymentsService } from './payments.service';
 
@@ -6,8 +13,10 @@ import { PaymentsService } from './payments.service';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Get(':amount/:method')
-  pay(@Param('amount') amount: number, @Param('method') method: string) {
-    return this.paymentsService.makePayment(Number(amount), method);
+  @Post(':method')
+  @HttpCode(HttpStatus.OK)
+  pay(@Body('amount') amount: number, @Param('method') method: string) {
+    const result = this.paymentsService.makePayment(Number(amount), method);
+    return { message: result };
   }
 }

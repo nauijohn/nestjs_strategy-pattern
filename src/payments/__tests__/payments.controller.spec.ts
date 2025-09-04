@@ -29,11 +29,12 @@ describe('PaymentsController', () => {
   });
 
   it('should call PaymentsService.makePayment with correct arguments', () => {
-    (service.makePayment as jest.Mock).mockReturnValue('success');
+    const mockResult = 'Payment successful';
+    jest.spyOn(service, 'makePayment').mockReturnValue(mockResult);
 
     const result = controller.pay(100, 'paypal');
 
     expect(service['makePayment']).toHaveBeenCalledWith(100, 'paypal');
-    expect(result).toBe('success');
+    expect(result).toEqual({ message: mockResult });
   });
 });

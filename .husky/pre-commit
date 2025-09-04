@@ -9,40 +9,18 @@ NC='\033[0m' # No Color
 
 MSG="[HUSKY][PRE-COMMIT]"
 
-# Define all stage messages
-STAGES=(
-  "Start"
-  "Formatting with Prettier"
-  # "Linting project"
-  "Building project"
-  "Testing project"
-  "Formatting failed ❌"
-  "Lint failed ❌"
-  "Build failed ❌"
-  "Tests failed ❌"
-  "All checks passed ✅"
-)
-
-# Find the maximum length
-MAX_LEN=100
-for stage in "${STAGES[@]}"; do
-  LEN=$(( ${#MSG} + 1 + ${#stage} ))
-  if [ $LEN -gt $MAX_LEN ]; then
-    MAX_LEN=$LEN
-  fi
-done
-
+# Function to print a message with a border
 print_boundary() {
   COLOR=$1
   TEXT=$2
   local CONTENT="${MSG} ${TEXT}"
-
+  local LEN=${#CONTENT}
   local BORDER
-  BORDER=$(printf '%*s' "$MAX_LEN" '' | tr ' ' '=')
+  BORDER=$(printf '%*s' "$LEN" '' | tr ' ' '=')
 
   echo ""
   echo "${COLOR}${BORDER}${NC}"
-  printf "${COLOR}%-*s${NC}\n" "$MAX_LEN" "$CONTENT"
+  printf "${COLOR}%-*s${NC}\n" "$LEN" "$CONTENT"
   echo "${COLOR}${BORDER}${NC}"
 }
 
@@ -56,7 +34,7 @@ if ! pnpm lint-staged; then
   exit 1
 fi
 
-# # Lint
+# Lint (optional)
 # print_boundary "$YELLOW" "Linting project"
 # if ! pnpm lint; then
 #   print_boundary "$RED" "Lint failed ❌"
@@ -70,10 +48,17 @@ if ! pnpm build; then
   exit 1
 fi
 
-# Test
+# Unit Tests
 print_boundary "$YELLOW" "Testing project"
 if ! pnpm test; then
   print_boundary "$RED" "Tests failed ❌"
+  exit 1
+fi
+
+# E2E Tests
+print_boundary "$YELLOW" "Running E2E tests"
+if ! pnpm test:e2e; then
+  print_boundary "$RED" "E2E tests failed ❌"
   exit 1
 fi
 
