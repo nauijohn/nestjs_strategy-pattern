@@ -8,7 +8,6 @@ export class PaymentsController {
 
   @Get(':amount/:method')
   pay(@Param('amount') amount: number, @Param('method') method: string) {
-    const x: any = amount;
     return this.paymentsService.makePayment(Number(amount), method);
   }
 }
