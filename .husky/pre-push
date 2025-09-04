@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+MSG="[HUSKY][PRE-PUSH]"
+
+print_boundary() {
+  COLOR=$1
+  TEXT=$2
+  local CONTENT="${MSG} ${TEXT}"
+  local BORDER
+  BORDER=$(printf '%*s' 100 '' | tr ' ' '=')
+  echo ""
+  echo "${COLOR}${BORDER}${NC}"
+  printf "${COLOR}%-*s${NC}\n" 100 "$CONTENT"
+  echo "${COLOR}${BORDER}${NC}"
+}
+
+print_boundary "$CYAN" "Start pre-push checks"
+
+# Lint project
+print_boundary "$YELLOW" "Linting project"
+if ! pnpm lint; then
+  print_boundary "$RED" "Lint failed ❌"
+  exit 1
+fi
+
+print_boundary "$GREEN" "Pre-push checks passed ✅"
