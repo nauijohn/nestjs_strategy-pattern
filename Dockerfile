@@ -6,6 +6,9 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
+# Disable Husky inside Docker
+ENV HUSKY=0
+
 # Copy lockfile + package.json first for better caching
 COPY package.json pnpm-lock.yaml ./
 
@@ -19,6 +22,9 @@ FROM node:22-alpine AS builder
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
+
+# Disable Husky inside Docker
+ENV HUSKY=0
 
 # Copy node_modules from deps stage
 COPY --from=deps /app/node_modules ./node_modules
@@ -38,6 +44,10 @@ FROM node:22-alpine AS production
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
+
+# Disable husky and scripts
+ENV HUSKY=0
+ENV NPM_CONFIG_IGNORE_SCRIPTS=true
 
 # Copy only production dependencies
 COPY package.json pnpm-lock.yaml ./
