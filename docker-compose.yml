@@ -1,0 +1,15 @@
+services:
+  nestjs_strategy-pattern:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: deps # only install deps for dev
+    container_name: nestjs_strategy-pattern
+    command: ['pnpm', 'start']
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/src
