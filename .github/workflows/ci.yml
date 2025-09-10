@@ -58,3 +58,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: anthonynaui/nestjs-strategy-pattern:latest
+          cache-from: type=registry,ref=anthonynaui/nestjs-strategy-pattern:cache
+          cache-to: type=registry,ref=anthonynaui/nestjs-strategy-pattern:cache,mode=max
