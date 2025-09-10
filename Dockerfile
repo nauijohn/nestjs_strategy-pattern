@@ -13,7 +13,7 @@ ENV HUSKY=0
 COPY package.json pnpm-lock.yaml ./
 
 # Install all dependencies (including dev for build)
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 
 # Stage 2: Build
@@ -51,7 +51,7 @@ ENV NPM_CONFIG_IGNORE_SCRIPTS=true
 
 # Copy only production dependencies
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --no-frozen-lockfile --prod
 
 # Copy compiled dist from builder
 COPY --from=builder /app/dist ./dist
